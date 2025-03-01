@@ -141,19 +141,23 @@ class _AlbumCardsState extends State<AlbumCards> {
                             ),
                             child: Column(
                               children: [
-                                Image.network(
-                                  randomItems[i]['image'] ?? '',
-                                  fit: BoxFit.cover,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Icon(Icons.broken_image,
-                                          size: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  child: Image.network(
+                                    randomItems[i]['image'] ?? '',
+                                    fit: BoxFit.cover,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    errorBuilder:
+                                        (context, error, stackTrace) => Icon(
+                                            Icons.broken_image,
+                                            size: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.4),
+                                  ),
                                 ),
                                 Expanded(
                                   child: Text(
@@ -349,16 +353,20 @@ class _AlbumCards_1State extends State<AlbumCards_1> {
                             ),
                             child: Column(
                               children: [
-                                Image.network(
-                                  album['image'],
-                                  fit: BoxFit.cover,
-                                  height: 120,
-                                  width: 180,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Image.asset('images/icon_broken.png',
-                                          fit: BoxFit.cover,
-                                          height: 120,
-                                          width: 180),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  child: Image.network(
+                                    album['image'],
+                                    fit: BoxFit.cover,
+                                    height: 120,
+                                    width: 180,
+                                    errorBuilder: (context, error,
+                                            stackTrace) =>
+                                        Image.asset('images/icon_broken.png',
+                                            fit: BoxFit.cover,
+                                            height: 120,
+                                            width: 180),
+                                  ),
                                 ),
                                 Expanded(
                                   child: Text(

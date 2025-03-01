@@ -104,8 +104,8 @@ class SearchDelegateExample extends SearchDelegate {
     if (query.isEmpty) return;
 
     final prefs = await SharedPreferences.getInstance();
-    recentSearches.remove(query); 
-    recentSearches.insert(0, query); 
+    recentSearches.remove(query);
+    recentSearches.insert(0, query);
 
     // Keep only last 10 searches
     if (recentSearches.length > 10) {
@@ -143,7 +143,6 @@ class SearchDelegateExample extends SearchDelegate {
           }));
 
       isLoading = false;
-     
     } catch (e) {
       isLoading = false;
     }
@@ -190,10 +189,15 @@ class SearchDelegateExample extends SearchDelegate {
             trailing: IconButton(
               icon: const Icon(Icons.close, color: Colors.white54),
               onPressed: () async {
-                recentSearches.removeAt(index);
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setStringList(RECENT_SEARCHES_KEY, recentSearches);
-                (context as Element).markNeedsBuild();
+                if (index >= 0 && index < recentSearches.length) {
+                  recentSearches.removeAt(index);
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setStringList(
+                      RECENT_SEARCHES_KEY, recentSearches);
+
+                  query = query + ' ';
+                  query = query.trim();
+                }
               },
             ),
           );
