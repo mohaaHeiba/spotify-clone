@@ -65,6 +65,15 @@ class _AlbumPageState extends State<AlbumPage> {
 
     _songList = fetchSongsFromFirestore(widget.album['id']);
 
+    // Check if current playback is from this specific album
+    if (_audioPlayer.sequence?.isNotEmpty ?? false) {
+      var currentItem = _audioPlayer.sequence?[_audioPlayer.currentIndex ?? 0];
+      if (currentItem?.tag?.album == widget.album['title']) {
+        currentPlaybackSource = 'AlbumPage';
+        _currentlyPlayingIndex = _audioPlayer.currentIndex;
+      }
+    }
+
     _playerStateSubscription = _audioPlayer.playerStateStream.listen((state) {
       if (mounted) {
         setState(() {
@@ -73,11 +82,13 @@ class _AlbumPageState extends State<AlbumPage> {
       }
     });
 
-    // Use StreamSubscription for current index
     _currentIndexSubscription = _audioPlayer.currentIndexStream.listen((index) {
       if (mounted) {
         setState(() {
-          if (currentPlaybackSource == 'AlbumPage') {
+          // Check if current playing song is from this album
+          var currentItem = _audioPlayer.sequence?[index ?? 0];
+          if (currentItem?.tag?.album == widget.album['title']) {
+            currentPlaybackSource = 'AlbumPage';
             _currentlyPlayingIndex = index;
           } else {
             _currentlyPlayingIndex = null;
@@ -285,7 +296,9 @@ class _AlbumPageState extends State<AlbumPage> {
         itemBuilder: (context, i) {
           var song = songs[i];
           bool isPlaying = _currentlyPlayingIndex == i &&
-              currentPlaybackSource == 'AlbumPage';
+              _audioPlayer
+                      .sequence?[_audioPlayer.currentIndex ?? 0]?.tag?.album ==
+                  widget.album['title'];
 
           return GestureDetector(
             onTap: () async {
@@ -299,7 +312,7 @@ class _AlbumPageState extends State<AlbumPage> {
                   Uri.parse(song['audioUrl']),
                   tag: MediaItem(
                     id: song['audioUrl'],
-                    album: widget.album['name'],
+                    album: widget.album['title'],
                     title: song['title'],
                     artist: song['artist'],
                     artUri: Uri.parse(widget.album['image'] ?? ''),

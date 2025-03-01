@@ -313,8 +313,6 @@ class _AlbumCards_1State extends State<AlbumCards_1> {
                   final album = i < lastPlayedAlbums.length
                       ? lastPlayedAlbums[i]
                       : albumData[i % albumData.length];
-                  final isLastPlayed = i < lastPlayedAlbums.length;
-
                   return Padding(
                     padding: const EdgeInsets.only(right: 5),
                     child: SizedBox(

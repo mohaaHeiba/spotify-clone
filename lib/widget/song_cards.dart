@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_audio/just_audio.dart';
@@ -250,6 +252,10 @@ class _SongCards_1State extends State<SongCards_1> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Map<String, dynamic>> lastPlayedSongs = [];
 
+  // Add these new variables at the top of the class
+  String? currentlyPlayingSongId;
+  StreamSubscription<PlaybackEvent>? playbackEventSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -275,6 +281,18 @@ class _SongCards_1State extends State<SongCards_1> {
         });
       });
     }
+
+    // Add this listener to track the currently playing song
+    playbackEventSubscription =
+        _audioPlayer.playbackEventStream.listen((event) {
+      if (_audioPlayer.sequence != null && _audioPlayer.sequence!.isNotEmpty) {
+        var currentItem =
+            _audioPlayer.sequence![_audioPlayer.currentIndex ?? 0];
+        setState(() {
+          currentlyPlayingSongId = (currentItem.tag as MediaItem).id;
+        });
+      }
+    });
   }
 
   Future<void> fetchSongsFromFirestore() async {
@@ -454,14 +472,19 @@ class _SongCards_1State extends State<SongCards_1> {
   }
 
   Widget buildSongContainer(Map<String, dynamic> song, bool isLastPlayed) {
+    bool isPlaying = currentlyPlayingSongId == song['audioUrl'];
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[900],
+        color: isPlaying ? Colors.white24 : Colors.grey[900],
         borderRadius: BorderRadius.circular(5.0),
       ),
       child: MaterialButton(
         padding: EdgeInsets.zero,
         onPressed: () async {
+          setState(() {
+            currentlyPlayingSongId = song['audioUrl'];
+          });
           var audioSource = AudioSource.uri(
             Uri.parse(song['audioUrl']),
             tag: MediaItem(
@@ -586,6 +609,7 @@ class _SongCards_1State extends State<SongCards_1> {
 
   @override
   void dispose() {
+    playbackEventSubscription?.cancel();
     super.dispose();
   }
 }
