@@ -1,0 +1,68 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace = "com.example.music_app"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17 // Corrected property for Java 17
+        targetCompatibility JavaVersion.VERSION_17 // Corrected property for Java 17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17" // Set Kotlin to use Java 17 compatibility
+    }
+
+    defaultConfig {
+        applicationId = "com.example.music_app"
+        minSdkVersion 29
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            // Enable code shrinking (minifyEnabled) and resource shrinking (shrinkResources)
+            minifyEnabled true
+            shrinkResources true
+            // Use the default ProGuard rules
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            // Optional: Disable shrinking for debug builds
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+}
+
+repositories {
+    google()        // Google's Maven repository
+    mavenCentral()  // Maven Central repository
+    jcenter()       // Add this as a fallback if Maven Central is down
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:33.6.0')
+
+    // Add Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0" // Update Kotlin version if needed
+    implementation "com.android.support:appcompat-v7:28.0.0" 
+}
+
+apply plugin: 'com.google.gms.google-services'
