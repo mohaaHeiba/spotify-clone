@@ -11,7 +11,7 @@ This app offers a seamless music streaming experience with real-time features, b
   - Secure and persistent session management.
 
 - **Music Library**
-  - Upload and stream audio files via Firebase Storage.
+  - download and stream audio files via Firestore connected with dropbox to upload songs.
   - Organized by albums, songs.
 
 - **Like System**
@@ -39,9 +39,9 @@ This app offers a seamless music streaming experience with real-time features, b
 ## Tech Stack
 
 - **Frontend**: Flutter (Dart)
-- **Backend**: Firebase (Auth, Firestore, Storage)
+- **Backend**: Firebase (Auth, Firestore,  Firestore connected with dropbox)
 - **Audio**: just_audio, just_audio_background
-- **State Management**: [Specify: Provider, Riverpod, Bloc, etc.]
+- **State Management**: [Specify: Riverpod, Bloc, etc.]
 - **Design**: Material 3, Custom Widgets
 
 ## Screenshots
